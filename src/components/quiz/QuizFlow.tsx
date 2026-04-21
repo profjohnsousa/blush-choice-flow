@@ -4,16 +4,17 @@ import QuestionStep from "./QuestionStep";
 import Interstitial from "./Interstitial";
 import EmailCaptureStep from "./EmailCaptureStep";
 import LoadingScreen from "./LoadingScreen";
+import ResultScreen from "./ResultScreen";
 import { STEPS } from "./stepData";
 import { Answers } from "./types";
 
 const TOTAL_STEPS = 15;
-const VSL_URL = "https://sua-vsl-aqui.com";
 
 type Phase =
   | { kind: "question"; step: number }
   | { kind: "interstitial" }
-  | { kind: "loading" };
+  | { kind: "loading" }
+  | { kind: "result" };
 
 const QuizFlow = () => {
   const [phase, setPhase] = useState<Phase>({ kind: "question", step: 1 });
@@ -46,17 +47,15 @@ const QuizFlow = () => {
     setPhase({ kind: "loading" });
   };
 
+  if (phase.kind === "result") {
+    return <ResultScreen />;
+  }
+
   if (phase.kind === "loading") {
     const finalAnswers = answers;
     // eslint-disable-next-line no-console
     console.log("Final quiz answers:", finalAnswers);
-    return (
-      <LoadingScreen
-        onComplete={() => {
-          window.location.href = VSL_URL;
-        }}
-      />
-    );
+    return <LoadingScreen onComplete={() => setPhase({ kind: "result" })} />;
   }
 
   if (phase.kind === "interstitial") {

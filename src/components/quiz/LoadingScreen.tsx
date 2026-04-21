@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -6,41 +6,88 @@ interface LoadingScreenProps {
 
 const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
   const [progress, setProgress] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const totalDuration = 6000;
     const start = Date.now();
-    const duration = 3000;
+    let pausedAt: number | null = null;
+
     const tick = () => {
       const elapsed = Date.now() - start;
-      const pct = Math.min(100, (elapsed / duration) * 100);
+      const pct = Math.min(100, (elapsed / totalDuration) * 100);
+
+      if (pct >= 80 && pausedAt === null) {
+        // Pause at 80%
+        setProgress(80);
+        setPaused(true);
+        setShowPopup(true);
+        pausedAt = Date.now();
+        // Resume after 800ms, animating remaining 20% over 2s
+        window.setTimeout(() => {
+          const resumeStart = Date.now();
+          const resumeDuration = 2000;
+          const resumeTick = () => {
+            const re = Date.now() - resumeStart;
+            const rp = Math.min(100, 80 + (re / resumeDuration) * 20);
+            setProgress(rp);
+            if (rp < 100) rafRef.current = requestAnimationFrame(resumeTick);
+          };
+          setPaused(false);
+          rafRef.current = requestAnimationFrame(resumeTick);
+        }, 800);
+        return;
+      }
+
       setProgress(pct);
-      if (pct < 100) requestAnimationFrame(tick);
-      else window.setTimeout(onComplete, 200);
+      if (pct < 80) rafRef.current = requestAnimationFrame(tick);
     };
-    const raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [onComplete]);
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   return (
-    <main className="min-h-[100dvh] w-full bg-background flex justify-center">
-      <div className="w-full max-w-[480px] flex flex-col items-center justify-center px-5 animate-fade-in-up">
-        <h1
-          className="font-serif-display text-primary text-6xl font-black leading-none mb-12"
-          aria-label="MSD"
+    <main className="min-h-[100dvh] w-full bg-background flex justify-center relative">
+      {/* Top green popup */}
+      {showPopup && (
+        <div
+          className="fixed top-0 inset-x-0 z-50 px-4 pt-3 pb-4 text-center animate-slide-down"
+          style={{ backgroundColor: "hsl(123 46% 34%)" }}
         >
-          MSD
-        </h1>
+          <p className="text-white font-bold text-base sm:text-lg">
+            ¡ANÁLISIS COMPLETADO! 🎉
+          </p>
+          <p className="text-white text-sm mt-1">
+            ¡Haz clic en el botón de abajo y conoce tu perfil! ⬇️
+          </p>
+        </div>
+      )}
 
-        <h2 className="text-center font-bold text-foreground text-2xl mb-2">
-          Analisando suas respostas...
-        </h2>
-        <p className="text-center text-muted-foreground italic mb-8">
-          Identificando seu perfil bíblico...
-        </p>
+      <div className="w-full max-w-[480px] flex flex-col px-5 pt-6 pb-32 animate-fade-in-up">
+        <header className="flex flex-col items-center">
+          <h1
+            className="font-serif-display text-primary text-5xl sm:text-6xl font-black leading-none select-none"
+            aria-label="MSD"
+          >
+            MSD
+          </h1>
+        </header>
+
+        <div className="mt-8 flex justify-between items-center text-sm">
+          <span className="font-medium text-foreground">Analizando tus respuestas...</span>
+          <span className="font-bold" style={{ color: "hsl(var(--progress-fill))" }}>
+            {Math.round(progress)}%
+          </span>
+        </div>
 
         <div
-          className="h-2 w-full max-w-xs rounded-full overflow-hidden"
-          style={{ backgroundColor: "hsl(var(--progress-track))" }}
+          className="mt-2 h-2 w-full rounded-full overflow-hidden"
+          style={{ backgroundColor: "hsl(var(--card))" }}
         >
           <div
             className="h-full rounded-full transition-all duration-150 ease-linear"
@@ -50,9 +97,53 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
             }}
           />
         </div>
-        <p className="mt-3 text-sm font-bold" style={{ color: "hsl(var(--progress-fill))" }}>
-          {Math.round(progress)}%
-        </p>
+
+        {/* Illustration placeholder */}
+        <div
+          className="mt-6 w-full rounded-2xl flex items-center justify-center px-6 py-10"
+          style={{
+            background: "linear-gradient(135deg, #f9e4d4, #fce4ec)",
+            minHeight: "220px",
+          }}
+        >
+          <p
+            className="text-center italic font-serif-display"
+            style={{ color: "#8B5E52", fontSize: "1.1rem", lineHeight: 1.4 }}
+          >
+            Tú dices que quieres cambiar. Pero te saboteas antes de intentarlo.
+          </p>
+        </div>
+
+        {/* White info card */}
+        <div className="mt-5 rounded-2xl bg-white/90 px-5 py-4 shadow-sm">
+          <p className="text-foreground text-[0.97rem] leading-relaxed">
+            En instantes, vas a descubrir cuál es tu <span className="font-bold">perfil bíblico</span>{" "}
+            y entender cómo este descubrimiento puede{" "}
+            <span className="font-bold">transformar tu forma de actuar</span>,{" "}
+            <span className="font-bold">revelar tu verdadera identidad</span> y mostrar cómo la{" "}
+            <span className="font-bold">
+              Palabra del Señor puede realinear tu vida con propósito y dirección
+            </span>
+            .
+          </p>
+        </div>
+
+        {paused || progress >= 80 ? (
+          <div className="fixed inset-x-0 bottom-0 px-5 pb-5 flex justify-center pointer-events-none">
+            <button
+              type="button"
+              onClick={onComplete}
+              className="pointer-events-auto w-full max-w-[480px] rounded-xl py-[18px] font-bold text-white animate-scale-in shadow-[0_10px_30px_-10px_hsl(var(--progress-fill)/0.7)] active:scale-[0.99] transition-transform"
+              style={{
+                backgroundColor: "hsl(var(--progress-fill))",
+                fontSize: "1.1rem",
+                letterSpacing: "0.05em",
+              }}
+            >
+              CONOCER MI PERFIL
+            </button>
+          </div>
+        ) : null}
       </div>
     </main>
   );
