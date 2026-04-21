@@ -16,16 +16,16 @@ const Interstitial = ({ onContinue }: InterstitialProps) => (
     />
 
     <h2 className="mt-6 text-center font-bold text-foreground text-[1.35rem] sm:text-2xl leading-snug">
-      ✨ Comparações silenciosas que te paralisam
+      ✨ Comparaciones silenciosas que te paralizan
     </h2>
 
     <p className="mt-3 text-center text-foreground/80 text-base leading-relaxed">
-      Você vê mulheres com a vida 'perfeita' nas redes sociais e, sem perceber, começa a se sentir
-      insuficiente.
+      Ves a mujeres con la vida 'perfecta' en redes sociales y, sin darte cuenta, empiezas a
+      sentirte insuficiente.
     </p>
 
     <p className="mt-4 text-center font-medium text-foreground text-base leading-relaxed">
-      🧠 O problema não é só o feed, é se olhar com os olhos errados.
+      🧠 El problema no es solo el feed, es mirarte con los ojos equivocados.
     </p>
 
     <div
@@ -36,7 +36,7 @@ const Interstitial = ({ onContinue }: InterstitialProps) => (
         className="italic font-bold text-base leading-relaxed"
         style={{ color: "hsl(var(--progress-fill))" }}
       >
-        📖 "Cada uma de nós recebeu um dom especial da parte de Deus."
+        📖 "Cada uno según el don que ha recibido, minístrelo a los otros."
       </p>
       <p
         className="italic font-bold text-sm mt-1"

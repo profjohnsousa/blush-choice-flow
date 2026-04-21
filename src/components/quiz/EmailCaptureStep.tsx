@@ -14,36 +14,36 @@ const EmailCaptureStep = ({ onSubmit }: EmailCaptureStepProps) => {
   return (
     <>
       <h2 className="mt-8 text-center font-bold text-foreground text-[1.35rem] sm:text-2xl leading-snug px-1">
-        Onde posso te enviar o seu resultado?
+        ¿Dónde puedo enviarte tu resultado?
       </h2>
       <p className="mt-2 text-center italic text-muted-foreground text-sm">
-        Quase lá! Preencha seus dados para receber seu perfil bíblico.
+        ¡Casi listo! Completa tus datos para recibir tu perfil bíblico.
       </p>
 
       <div className="mt-7 flex flex-col gap-4">
         <div>
           <label className="block text-sm font-bold text-foreground mb-1.5" htmlFor="quiz-name">
-            Seu nome
+            Tu nombre
           </label>
           <input
             id="quiz-name"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Como podemos te chamar?"
+            placeholder="¿Cómo te podemos llamar?"
             className="w-full rounded-xl px-4 py-3.5 bg-card border-2 border-[hsl(var(--card-border))] focus:border-[hsl(var(--card-border-strong))] focus:outline-none text-foreground placeholder:text-muted-foreground transition-colors"
           />
         </div>
         <div>
           <label className="block text-sm font-bold text-foreground mb-1.5" htmlFor="quiz-email">
-            Seu melhor e-mail
+            Tu mejor correo electrónico
           </label>
           <input
             id="quiz-email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="email@exemplo.com"
+            placeholder="correo@ejemplo.com"
             className="w-full rounded-xl px-4 py-3.5 bg-card border-2 border-[hsl(var(--card-border))] focus:border-[hsl(var(--card-border-strong))] focus:outline-none text-foreground placeholder:text-muted-foreground transition-colors"
           />
         </div>
@@ -52,7 +52,7 @@ const EmailCaptureStep = ({ onSubmit }: EmailCaptureStepProps) => {
       <ContinueButton
         disabled={!valid}
         onClick={() => onSubmit({ name: name.trim(), email: email.trim() })}
-        label="Ver meu resultado"
+        label="Ver mi resultado"
       />
     </>
   );
