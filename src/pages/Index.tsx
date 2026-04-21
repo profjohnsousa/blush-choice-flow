@@ -1,12 +1,5 @@
-import QuizStep, { type QuizOption } from "@/components/QuizStep";
+import QuizFlow from "@/components/quiz/QuizFlow";
 
-const Index = () => {
-  const handleAnswer = (answer: QuizOption) => {
-    // Hook into your quiz flow here
-    console.log("onAnswer:", answer);
-  };
-
-  return <QuizStep onAnswer={handleAnswer} currentStep={1} totalSteps={20} />;
-};
+const Index = () => <QuizFlow />;
 
 export default Index;
