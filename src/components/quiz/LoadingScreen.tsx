@@ -20,12 +20,10 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       const pct = Math.min(100, (elapsed / totalDuration) * 100);
 
       if (pct >= 80 && pausedAt === null) {
-        // Pause at 80%
         setProgress(80);
         setPaused(true);
         setShowPopup(true);
         pausedAt = Date.now();
-        // Resume after 800ms, animating remaining 20% over 2s
         window.setTimeout(() => {
           const resumeStart = Date.now();
           const resumeDuration = 2000;
@@ -53,7 +51,6 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
 
   return (
     <main className="min-h-[100dvh] w-full bg-background flex justify-center relative">
-      {/* Top green popup */}
       {showPopup && (
         <div
           className="fixed top-0 inset-x-0 z-50 px-4 pt-3 pb-4 text-center animate-slide-down"
@@ -98,28 +95,20 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
           />
         </div>
 
-        {/* Illustration placeholder */}
-        <div
-          className="mt-6 w-full rounded-2xl flex items-center justify-center px-6 py-10"
-          style={{
-            background: "linear-gradient(135deg, #f9e4d4, #fce4ec)",
-            minHeight: "220px",
-          }}
-        >
-          <p
-            className="text-center italic font-serif-display"
-            style={{ color: "#8B5E52", fontSize: "1.1rem", lineHeight: 1.4 }}
-          >
-            Tú dices que quieres cambiar. Pero te saboteas antes de intentarlo.
-          </p>
+        <div className="mt-6 w-full rounded-2xl overflow-hidden">
+          <img
+            src="/loading-antes-depois.png"
+            alt="Transformação"
+            className="w-full object-cover"
+            style={{ maxHeight: "300px" }}
+          />
         </div>
 
-        {/* White info card */}
         <div className="mt-5 rounded-2xl bg-white/90 px-5 py-4 shadow-sm">
           <p className="text-foreground text-[0.97rem] leading-relaxed">
-            En instantes, vas a descubrir cuál es tu <span className="font-bold">perfil bíblico</span>{" "}
-            y entender cómo este descubrimiento puede{" "}
-            <span className="font-bold">transformar tu forma de actuar</span>,{" "}
+            En instantes, vas a descubrir cuál es tu{" "}
+            <span className="font-bold">perfil bíblico</span> y entender cómo este descubrimiento
+            puede <span className="font-bold">transformar tu forma de actuar</span>,{" "}
             <span className="font-bold">revelar tu verdadera identidad</span> y mostrar cómo la{" "}
             <span className="font-bold">
               Palabra del Señor puede realinear tu vida con propósito y dirección
