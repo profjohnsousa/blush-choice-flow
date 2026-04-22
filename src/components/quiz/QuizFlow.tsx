@@ -49,6 +49,7 @@ const QuizFlow = () => {
     const finalAnswers = answers;
     // eslint-disable-next-line no-console
     console.log("Final quiz answers:", finalAnswers);
+    sessionStorage.setItem("quizAnswers", JSON.stringify(finalAnswers));
     return <LoadingScreen onComplete={() => setPhase({ kind: "result" })} />;
   }
 
