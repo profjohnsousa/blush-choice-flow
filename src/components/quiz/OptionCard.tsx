@@ -7,9 +7,10 @@ interface OptionCardProps {
   selected: boolean;
   onClick: () => void;
   showCheckbox?: boolean;
+  imageUrl?: string;
 }
 
-const OptionCard = ({ option, selected, onClick, showCheckbox }: OptionCardProps) => {
+const OptionCard = ({ option, selected, onClick, showCheckbox, imageUrl }: OptionCardProps) => {
   const renderText = () => {
     if (option.text) {
       return <span className="text-[1.02rem] leading-snug">{renderRichText(option.text)}</span>;
@@ -55,26 +56,31 @@ const OptionCard = ({ option, selected, onClick, showCheckbox }: OptionCardProps
           )}
         </span>
       )}
-
       {option.imagePlaceholder && (
-        <span
-          className="h-[60px] w-[60px] shrink-0 rounded-xl"
-          style={{
-            background:
-              "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--card-border)) 100%)",
-          }}
-          aria-hidden
-        />
+        imageUrl ? (
+          <img
+            src={imageUrl}
+            alt=""
+            className="h-[60px] w-[60px] shrink-0 rounded-xl object-cover"
+            aria-hidden
+          />
+        ) : (
+          <span
+            className="h-[60px] w-[60px] shrink-0 rounded-xl"
+            style={{
+              background:
+                "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--card-border)) 100%)",
+            }}
+            aria-hidden
+          />
+        )
       )}
-
       {option.emoji && (
         <span className="text-2xl leading-none shrink-0" aria-hidden>
           {option.emoji}
         </span>
       )}
-
       <span className="flex-1">{renderText()}</span>
-
       {option.chevron && (
         <ChevronRight className="h-5 w-5 shrink-0 text-[hsl(var(--card-border-strong))]" aria-hidden />
       )}
@@ -82,7 +88,6 @@ const OptionCard = ({ option, selected, onClick, showCheckbox }: OptionCardProps
   );
 };
 
-// Parses **bold** and color-bold tokens like {{pink:word}}
 function renderRichText(text: string) {
   const parts: Array<string | JSX.Element> = [];
   const regex = /(\*\*[^*]+\*\*|\{\{pink:[^}]+\}\})/g;
