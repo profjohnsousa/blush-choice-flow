@@ -68,14 +68,20 @@ const LoadingScreen = ({ onComplete }: LoadingScreenProps) => {
       <div className="w-full max-w-[480px] flex flex-col px-5 pt-6 pb-32 animate-fade-in-up">
         <header className="flex flex-col items-center">
           <h1
-            className="font-serif-display text-primary text-5xl sm:text-6xl font-black leading-none select-none"
-            aria-label="MSD"
+            className="font-serif-display text-primary text-4xl sm:text-5xl font-black leading-none select-none tracking-tight"
+            aria-label="Mujer Sabia en Acción"
           >
-            MSD
+            Mujer Sabia
           </h1>
+          <p
+            className="font-serif-display text-lg sm:text-xl font-semibold leading-none select-none tracking-widest mt-1"
+            style={{ color: "hsl(var(--progress-fill))" }}
+          >
+            en Acción
+          </p>
         </header>
 
-        <div className="mt-8 flex justify-between items-center text-sm">
+        <div className="mt-6 flex justify-between items-center text-sm">
           <span className="font-medium text-foreground">Analizando tus respuestas...</span>
           <span className="font-bold" style={{ color: "hsl(var(--progress-fill))" }}>
             {Math.round(progress)}%
