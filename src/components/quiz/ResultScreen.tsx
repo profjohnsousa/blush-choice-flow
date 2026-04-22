@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-const VSL_URL = "https://sua-vsl-aqui.com";
+const VSL_URL = "/vsl";
 
 interface Profile {
   id: number;
