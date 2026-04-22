@@ -29,6 +29,13 @@ const renderRichQuestion = (text: string) => {
   return <>{parts}</>;
 };
 
+const step5Images: Record<string, string> = {
+  "a": "/step5-card1.png",
+  "b": "/step5-card2.png",
+  "c": "/step5-card3.png",
+  "d": "/step5-card4.png",
+};
+
 const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
   const [selectedSingle, setSelectedSingle] = useState<string | null>(null);
   const [selectedMulti, setSelectedMulti] = useState<string[]>([]);
@@ -53,13 +60,6 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
     config.type === "A" ? selectedSingle === id : selectedMulti.includes(id);
 
   const sideImage = config.layout === "side-image";
-
-  const step5Images: Record<string, string> = {
-    "a": "/step5-card1.png",
-    "b": "/step5-card2.png",
-    "c": "/step5-card3.png",
-    "d": "/step5-card4.png",
-  };
 
   return (
     <>
@@ -101,25 +101,14 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
           </>
         ) : (
           config.options.map((opt) => (
-            <div key={opt.id} className="relative">
-              {config.step === 5 && step5Images[opt.id] && (
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 w-14 h-14 rounded-lg overflow-hidden z-10">
-                  <img
-                    src={step5Images[opt.id]}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              <div className={config.step === 5 ? "pl-20" : ""}>
-                <OptionCard
-                  option={opt}
-                  selected={isSelected(opt.id)}
-                  onClick={() => handleSelect(opt.id)}
-                  showCheckbox={config.type === "B"}
-                />
-              </div>
-            </div>
+            <OptionCard
+              key={opt.id}
+              option={opt}
+              selected={isSelected(opt.id)}
+              onClick={() => handleSelect(opt.id)}
+              showCheckbox={config.type === "B"}
+              imageUrl={config.step === 5 ? step5Images[opt.id] : undefined}
+            />
           ))
         )}
       </div>
