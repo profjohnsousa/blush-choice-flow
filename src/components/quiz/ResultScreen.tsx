@@ -2,7 +2,25 @@ import { useRef } from "react";
 
 const VSL_URL = "https://sua-vsl-aqui.com";
 
-const profiles = [
+interface Profile {
+  id: number;
+  name: string;
+  image: string;
+  biblicalProfile: string;
+  descriptionBold: string;
+  description1: string;
+  description2: string;
+  description2Bold: string;
+  verseText: string;
+  verseRef: string;
+  verseLine1: string;
+  verseLine2: string;
+  needs: string[];
+  closing: string;
+  closingBold: string;
+}
+
+const profiles: Profile[] = [
   {
     id: 1,
     name: "La Intencional Inconstante",
@@ -47,10 +65,112 @@ const profiles = [
     closing: "Ser activa no es lo mismo que ser productiva.",
     closingBold: "Dios quiere que fructifiques, con paz, foco y sabiduría.",
   },
+  {
+    id: 3,
+    name: "La Visionaria Paralizada",
+    image: "/result-ester.png",
+    biblicalProfile: "👑 Ester - Valentía para actuar en el momento correcto",
+    descriptionBold: "🧠 Tienes sueños grandes y una visión clara. Pero el miedo a equivocarte te impide dar el primer paso.",
+    description1: "Esperas el momento perfecto, la señal de Dios, las condiciones ideales... y mientras tanto, el tiempo pasa y tus sueños siguen siendo solo ideas.",
+    description2: "No te falta fe ni visión. Te falta",
+    description2Bold: "valentía para actuar aunque no te sientas lista.",
+    verseText: "\"¿Y quién sabe si para esta hora has llegado al reino?\"",
+    verseRef: "— Ester 4:14 (NVI)",
+    verseLine1: "Ester tampoco se sentía lista.",
+    verseLine2: "Pero actuó con fe, y cambió su historia.",
+    needs: [
+      "Dar el primer paso aunque el camino no esté claro",
+      "Soltar el perfeccionismo que te paraliza",
+      "Confiar que Dios actúa mientras tú te mueves",
+      "Un plan concreto para salir de la parálisis hoy",
+    ],
+    closing: "Tu momento es ahora. No cuando todo esté perfecto.",
+    closingBold: "Dios te llamó para este tiempo.",
+  },
+  {
+    id: 4,
+    name: "La Fiel Desconectada",
+    image: "/result-marta.png",
+    biblicalProfile: "🕊️ María y Marta - Fe y acción integradas",
+    descriptionBold: "🧠 Eres fiel en tu fe, pero sientes que tu vida espiritual y tu rutina práctica viven en mundos separados.",
+    description1: "Oras, vas a la iglesia, confías en Dios... pero en el día a día te sientes desconectada. Como si la fe fuera para los domingos y la vida real fuera otra cosa.",
+    description2: "No necesitas más devoción. Necesitas",
+    description2Bold: "integrar tu fe con tu forma de vivir cada día.",
+    verseText: "\"Marta, Marta, afanada y turbada estás con muchas cosas.\"",
+    verseRef: "— Lucas 10:41 (NVI)",
+    verseLine1: "No se trata de hacer menos.",
+    verseLine2: "Se trata de hacer lo correcto, desde el lugar correcto.",
+    needs: [
+      "Conectar tu fe con tus decisiones diarias",
+      "Una rutina que incluya a Dios en lo práctico, no solo en lo espiritual",
+      "Claridad sobre cuál es tu llamado real en esta temporada",
+      "Paz para soltar lo que no es tuyo cargar",
+    ],
+    closing: "No estás llamada a hacer todo. Estás llamada a hacer",
+    closingBold: "lo que Dios preparó específicamente para ti.",
+  },
 ];
 
+// Determine profile based on quiz answers
+const getProfile = (): Profile => {
+  // Score system based on answer patterns
+  // This runs on mount so we use a simple random weighted by
+  // typical answer distributions across the 4 archetypes
+  const scores = [0, 0, 0, 0]; // indexes: 0=Intencional, 1=Desorganizada, 2=Visionaria, 3=Desconectada
+
+  try {
+    // Try to read answers from sessionStorage if QuizFlow stored them
+    const raw = sessionStorage.getItem("quizAnswers");
+    if (raw) {
+      const answers = JSON.parse(raw);
+
+      // Step 4 — self-talk phrases
+      if (answers[4] === "a") scores[0] += 2; // "sé lo que hacer pero no hago" → Intencional
+      if (answers[4] === "b") scores[1] += 2; // "rutina me consume" → Desorganizada
+      if (answers[4] === "c") scores[2] += 2; // "cuando mejore, empiezo" → Visionaria
+      if (answers[4] === "d") scores[0] += 2; // "algo me bloquea" → Intencional
+
+      // Step 6 — what happens when starting something new
+      if (answers[6] === "a") scores[0] += 2; // "me emociono pero desanimo" → Intencional
+      if (answers[6] === "b") scores[1] += 2; // "me pierdo en distracciones" → Desorganizada
+      if (answers[6] === "c") scores[2] += 1; // "me comparo y bloqueo" → Visionaria
+      if (answers[6] === "d") scores[2] += 2; // "miedo de errar" → Visionaria
+      if (answers[6] === "e") scores[3] += 2; // "oro pero espero señal" → Desconectada
+
+      // Step 8 — conflict between spiritual and productive
+      if (answers[8] === "a") scores[3] += 2; // "productividad es del mundo" → Desconectada
+      if (answers[8] === "b") scores[3] += 2; // "tiempo de Dios" → Desconectada
+      if (answers[8] === "c") scores[1] += 1; // "puedo unir las dos" → Desorganizada
+      if (answers[8] === "d") scores[3] += 1; // "nunca lo había pensado" → Desconectada
+
+      // Step 9 — reaction to procrastination
+      if (answers[9] === "a") scores[0] += 2; // "me culpo y prometo" → Intencional
+      if (answers[9] === "b") scores[1] += 2; // "compenso con tareas" → Desorganizada
+      if (answers[9] === "c") scores[3] += 2; // "oro pero sigo paralizada" → Desconectada
+      if (answers[9] === "d") scores[2] += 2; // "finjo que está bien" → Visionaria
+
+      // Step 14 — situation that describes you today
+      if (answers[14] === "a") scores[2] += 2; // "quiero cambiar pero bloqueada" → Visionaria
+      if (answers[14] === "b") scores[2] += 2; // "pienso demasiado y actúo poco" → Visionaria
+      if (answers[14] === "c") scores[1] += 2; // "hago muchas cosas sin enfoque" → Desorganizada
+      if (answers[14] === "d") scores[0] += 2; // "sé qué hacer pero no sostengo" → Intencional
+    }
+  } catch {
+    // fallback to random if no answers stored
+  }
+
+  const maxScore = Math.max(...scores);
+  // If all zeros (no answers stored), pick randomly
+  if (maxScore === 0) {
+    return profiles[Math.floor(Math.random() * profiles.length)];
+  }
+
+  const winnerIndex = scores.indexOf(maxScore);
+  return profiles[winnerIndex];
+};
+
 const ResultScreen = () => {
-  const profile = useRef(profiles[Math.floor(Math.random() * profiles.length)]).current;
+  const profile = useRef(getProfile()).current;
 
   return (
     <main className="min-h-[100dvh] w-full bg-background flex justify-center">
