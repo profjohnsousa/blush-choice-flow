@@ -17,13 +17,18 @@ const QuizShell = ({ currentStep, totalSteps, children }: QuizShellProps) => {
       >
         <header className="flex flex-col items-center">
           <h1
-            className="font-serif-display text-primary text-5xl sm:text-6xl font-black leading-none select-none"
-            aria-label="MSD"
+            className="font-serif-display text-primary text-4xl sm:text-5xl font-black leading-none select-none tracking-tight"
+            aria-label="Mujer Sabia en Acción"
           >
-            MSD
+            Mujer Sabia
           </h1>
+          <p
+            className="font-serif-display text-primary text-lg sm:text-xl font-semibold leading-none select-none tracking-widest mt-1"
+            style={{ color: "hsl(var(--progress-fill))" }}
+          >
+            en Acción
+          </p>
         </header>
-
         <div
           className="mt-5 h-1 w-full rounded-full overflow-hidden"
           style={{ backgroundColor: "hsl(var(--progress-track))" }}
@@ -31,7 +36,7 @@ const QuizShell = ({ currentStep, totalSteps, children }: QuizShellProps) => {
           aria-valuenow={currentStep}
           aria-valuemin={0}
           aria-valuemax={totalSteps}
-          aria-label={`Etapa ${currentStep} de ${totalSteps}`}
+          aria-label={`Paso ${currentStep} de ${totalSteps}`}
         >
           <div
             className="h-full rounded-full transition-all duration-500 ease-out"
@@ -41,7 +46,6 @@ const QuizShell = ({ currentStep, totalSteps, children }: QuizShellProps) => {
             }}
           />
         </div>
-
         {children}
       </div>
     </main>
