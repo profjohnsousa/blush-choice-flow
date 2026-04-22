@@ -4,7 +4,7 @@ export interface StepConfig {
   step: number;
   type: "A" | "B";
   question?: string;
-  questionRich?: string; // supports **bold** and {{pink:text}}
+  questionRich?: string;
   subtitle?: string;
   options: QuizOption[];
   bottomPill?: { text: string; variant: "yellow-red" | "yellow-pink-italic" };
@@ -40,7 +40,7 @@ export const STEPS: StepConfig[] = [
   },
   {
     step: 3,
-    type: "B",
+    type: "A",
     question: "¿Sientes que tu vida está avanzando en la dirección que te gustaría?",
     layout: "side-image",
     options: [
@@ -77,7 +77,6 @@ export const STEPS: StepConfig[] = [
     step: 6,
     type: "A",
     question: "Cuando intentas empezar algo nuevo, ¿qué suele pasar?",
-    subtitle: "Puedes seleccionar más de una:",
     options: [
       { id: "a", chevron: true, text: "Me emociono, pero pronto me desanimo" },
       { id: "b", chevron: true, text: "Me pierdo en las distracciones del día a día" },
@@ -92,7 +91,7 @@ export const STEPS: StepConfig[] = [
     question: "¿Qué es lo que más te impide mantener una rutina productiva con propósito?",
     subtitle: "Puedes seleccionar más de una:",
     options: [
-      { id: "a", text: "Falta de claridad sobre lo que es más importante" },
+      { id: "a", text: "Falta de clareza sobre lo que es más importante" },
       { id: "b", text: "Desorganización y exceso de tareas" },
       { id: "c", text: "Falta de energía o motivación" },
       { id: "d", text: "Siento que no tengo apoyo o nadie entiende lo que vivo" },
