@@ -41,7 +41,6 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
   const handleSelect = (id: string) => {
     if (config.type === "A") {
       setSelectedSingle(id);
-      // brief delay so user sees selected state
       window.setTimeout(() => onSingle(id), 220);
     } else {
       setSelectedMulti((prev) =>
@@ -54,6 +53,14 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
     config.type === "A" ? selectedSingle === id : selectedMulti.includes(id);
 
   const sideImage = config.layout === "side-image";
+
+  // Image map for step 5 cards
+  const step5Images: Record<string, string> = {
+    "5a": "/step5-card1.png",
+    "5b": "/step5-card2.png",
+    "5c": "/step5-card3.png",
+    "5d": "/step5-card4.png",
+  };
 
   return (
     <>
@@ -85,46 +92,47 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
                 />
               ))}
             </div>
-            <div
-              className="w-[35%] aspect-[3/4] rounded-2xl shrink-0 self-stretch"
-              style={{
-                background:
-                  "linear-gradient(160deg, hsl(48 90% 80%) 0%, hsl(20 70% 70%) 50%, hsl(var(--card-border-strong)) 100%)",
-              }}
-              aria-hidden
-            />
+            <div className="w-[35%] shrink-0 self-stretch rounded-2xl overflow-hidden">
+              <img
+                src="/step3-caminho.png"
+                alt="Mulher caminhando"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </>
         ) : (
           config.options.map((opt) => (
-            <OptionCard
-              key={opt.id}
-              option={opt}
-              selected={isSelected(opt.id)}
-              onClick={() => handleSelect(opt.id)}
-              showCheckbox={config.type === "B"}
-            />
+            <div key={opt.id} className="relative">
+              {config.step === 5 && step5Images[opt.id] && (
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 w-14 h-14 rounded-lg overflow-hidden z-10">
+                  <img
+                    src={step5Images[opt.id]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              <div className={config.step === 5 ? "pl-20" : ""}>
+                <OptionCard
+                  option={opt}
+                  selected={isSelected(opt.id)}
+                  onClick={() => handleSelect(opt.id)}
+                  showCheckbox={config.type === "B"}
+                />
+              </div>
+            </div>
           ))
         )}
       </div>
 
-      {/* Step 8 special: dual image below options */}
+      {/* Step 8 — dual image below options */}
       {config.step === 8 && (
-        <div className="mt-5 flex gap-3">
-          <div
-            className="flex-1 aspect-square rounded-2xl"
-            style={{
-              background:
-                "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--card-border-strong)) 100%)",
-            }}
-            aria-hidden
-          />
-          <div
-            className="flex-1 aspect-square rounded-2xl"
-            style={{
-              background:
-                "linear-gradient(135deg, hsl(40 60% 80%) 0%, hsl(var(--primary)) 100%)",
-            }}
-            aria-hidden
+        <div className="mt-5 rounded-2xl overflow-hidden">
+          <img
+            src="/step8-dupla.png"
+            alt="Mulher orando e trabalhando"
+            className="w-full object-cover"
+            style={{ maxHeight: "220px" }}
           />
         </div>
       )}
