@@ -57,23 +57,12 @@ const OptionCard = ({ option, selected, onClick, showCheckbox, imageUrl }: Optio
         </span>
       )}
       {option.imagePlaceholder && (
-        imageUrl ? (
-          <img
-            src={imageUrl}
-            alt=""
-            className="h-[60px] w-[60px] shrink-0 rounded-xl object-cover"
-            aria-hidden
-          />
-        ) : (
-          <span
-            className="h-[60px] w-[60px] shrink-0 rounded-xl"
-            style={{
-              background:
-                "linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--card-border)) 100%)",
-            }}
-            aria-hidden
-          />
-        )
+        <img
+          src={imageUrl ?? ""}
+          alt=""
+          className="h-[60px] w-[60px] shrink-0 rounded-xl object-cover"
+          aria-hidden
+        />
       )}
       {option.emoji && (
         <span className="text-2xl leading-none shrink-0" aria-hidden>
