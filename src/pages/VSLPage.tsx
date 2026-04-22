@@ -1,6 +1,19 @@
+import { useEffect } from "react";
+
 const CHECKOUT_URL = "https://seu-checkout-aqui.com";
 
 const VSLPage = () => {
+  useEffect(() => {
+    const s = document.createElement("script");
+    s.src = "https://scripts.converteai.net/e8b90652-f08e-4177-9149-85207e0dd41d/players/69e939413a084e4af12c4ec9/v4/player.js";
+    s.async = true;
+    document.head.appendChild(s);
+
+    return () => {
+      document.head.removeChild(s);
+    };
+  }, []);
+
   return (
     <main className="min-h-[100dvh] w-full bg-background flex justify-center">
       <div className="w-full max-w-[480px] flex flex-col items-center px-5 pt-10 pb-16 gap-6">
@@ -18,38 +31,25 @@ const VSLPage = () => {
           </p>
         </div>
 
-        {/* Player placeholder — substituir pelo embed do Vturb */}
-        <div
-          className="w-full rounded-2xl overflow-hidden"
-          style={{ aspectRatio: "16/9", backgroundColor: "#1a1a1a" }}
-        >
-          {/* COLE O EMBED DO VTURB AQUI */}
-          <iframe
-            src="https://vturb.com.br/embed/PLACEHOLDER"
-            className="w-full h-full"
-            frameBorder="0"
-            allow="autoplay; fullscreen"
-            allowFullScreen
+        {/* Player Vturb */}
+        <div className="w-full">
+          <vturb-smartplayer
+            id="vid-69e939413a084e4af12c4ec9"
+            style={{ display: "block", margin: "0 auto", width: "100%" }}
           />
         </div>
-
-        {/* Botão de compra */}
-        <button
-          type="button"
-          onClick={() => { window.location.href = CHECKOUT_URL; }}
-          className="w-full rounded-xl py-[18px] font-bold text-white shadow-[0_10px_30px_-10px_hsl(var(--progress-fill)/0.7)] active:scale-[0.99] transition-transform animate-pulse-soft"
-          style={{
-            backgroundColor: "hsl(var(--progress-fill))",
-            fontSize: "1.05rem",
-            letterSpacing: "0.04em",
-          }}
-        >
-          QUIERO ACCEDER AHORA →
-        </button>
 
       </div>
     </main>
   );
 };
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      "vturb-smartplayer": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & { id?: string }, HTMLElement>;
+    }
+  }
+}
 
 export default VSLPage;
