@@ -54,12 +54,11 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
 
   const sideImage = config.layout === "side-image";
 
-  // Image map for step 5 cards
   const step5Images: Record<string, string> = {
-    "5a": "/step5-card1.png",
-    "5b": "/step5-card2.png",
-    "5c": "/step5-card3.png",
-    "5d": "/step5-card4.png",
+    "a": "/step5-card1.png",
+    "b": "/step5-card2.png",
+    "c": "/step5-card3.png",
+    "d": "/step5-card4.png",
   };
 
   return (
@@ -125,7 +124,6 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
         )}
       </div>
 
-      {/* Step 8 — dual image below options */}
       {config.step === 8 && (
         <div className="mt-5 rounded-2xl overflow-hidden">
           <img
