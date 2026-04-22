@@ -2,13 +2,12 @@ import { useState } from "react";
 import QuizShell from "./QuizShell";
 import QuestionStep from "./QuestionStep";
 import Interstitial from "./Interstitial";
-import EmailCaptureStep from "./EmailCaptureStep";
 import LoadingScreen from "./LoadingScreen";
 import ResultScreen from "./ResultScreen";
 import { STEPS } from "./stepData";
 import { Answers } from "./types";
 
-const TOTAL_STEPS = 15;
+const TOTAL_STEPS = 14;
 
 type Phase =
   | { kind: "question"; step: number }
@@ -42,11 +41,6 @@ const QuizFlow = () => {
     goToStep(step + 1);
   };
 
-  const handleEmailSubmit = (data: { name: string; email: string }) => {
-    setAnswers((prev) => ({ ...prev, 15: data }));
-    setPhase({ kind: "loading" });
-  };
-
   if (phase.kind === "result") {
     return <ResultScreen />;
   }
@@ -67,15 +61,6 @@ const QuizFlow = () => {
   }
 
   const step = phase.step;
-
-  if (step === 15) {
-    return (
-      <QuizShell currentStep={15} totalSteps={TOTAL_STEPS}>
-        <EmailCaptureStep onSubmit={handleEmailSubmit} />
-      </QuizShell>
-    );
-  }
-
   const config = STEPS.find((s) => s.step === step);
   if (!config) return null;
 
