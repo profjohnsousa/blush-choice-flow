@@ -64,23 +64,23 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
   return (
     <>
       {config.question && (
-        <h2 className="mt-8 text-center font-bold text-foreground text-[1.35rem] sm:text-2xl leading-snug px-1">
+        <h2 className="mt-5 text-center font-bold text-foreground text-[1.2rem] sm:text-xl leading-snug px-1">
           {config.question}
         </h2>
       )}
       {config.questionRich && (
-        <h2 className="mt-8 text-center font-bold text-foreground text-[1.35rem] sm:text-2xl leading-snug px-1">
+        <h2 className="mt-5 text-center font-bold text-foreground text-[1.2rem] sm:text-xl leading-snug px-1">
           {renderRichQuestion(config.questionRich)}
         </h2>
       )}
       {config.subtitle && (
-        <p className="mt-2 text-center italic text-muted-foreground text-sm">{config.subtitle}</p>
+        <p className="mt-1 text-center italic text-muted-foreground text-sm">{config.subtitle}</p>
       )}
 
-      <div className={sideImage ? "mt-7 flex gap-4 items-start" : "mt-7 flex flex-col gap-3.5"}>
+      <div className={sideImage ? "mt-4 flex gap-3 items-start" : "mt-4 flex flex-col gap-2"}>
         {sideImage ? (
           <>
-            <div className="flex-1 flex flex-col gap-3.5 min-w-0">
+            <div className="flex-1 flex flex-col gap-2 min-w-0">
               {config.options.map((opt) => (
                 <OptionCard
                   key={opt.id}
@@ -114,12 +114,12 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
       </div>
 
       {config.step === 8 && (
-        <div className="mt-5 rounded-2xl overflow-hidden">
+        <div className="mt-4 rounded-2xl overflow-hidden">
           <img
             src="/step8-dupla.png"
             alt="Mulher orando e trabalhando"
             className="w-full object-cover"
-            style={{ maxHeight: "220px" }}
+            style={{ maxHeight: "200px" }}
           />
         </div>
       )}
@@ -132,9 +132,9 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
       )}
 
       {config.bottomPill && config.bottomPill.variant === "yellow-red" && (
-        <div className="fixed inset-x-0 bottom-0 pointer-events-none flex justify-center pb-5 px-5">
+        <div className="mt-4 flex justify-center px-5">
           <div
-            className="pointer-events-auto rounded-full px-5 py-3 text-sm sm:text-base font-bold text-center shadow-[0_8px_24px_-10px_rgba(0,0,0,0.15)] max-w-[480px] w-full"
+            className="rounded-full px-5 py-2.5 text-sm sm:text-base font-bold text-center shadow-[0_8px_24px_-10px_rgba(0,0,0,0.15)] w-full"
             style={{
               backgroundColor: "hsl(var(--pill-bg))",
               color: "hsl(var(--pill-text))",
@@ -147,7 +147,7 @@ const QuestionStep = ({ config, onSingle, onMulti }: QuestionStepProps) => {
 
       {config.bottomPill && config.bottomPill.variant === "yellow-pink-italic" && (
         <div
-          className="mt-6 rounded-2xl px-4 py-3 text-sm italic text-center font-medium"
+          className="mt-4 rounded-2xl px-4 py-3 text-sm italic text-center font-medium"
           style={{
             backgroundColor: "hsl(55 100% 94%)",
             color: "hsl(var(--progress-fill))",
