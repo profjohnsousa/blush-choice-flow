@@ -250,13 +250,16 @@ const ResultScreen = () => {
         {/* BLOCK 7 — CTA */}
         <button
           type="button"
-          onClick={() => { window.location.href = VSL_URL; }}
-          className="w-full rounded-xl py-[18px] font-bold text-white animate-pulse-soft shadow-[0_10px_30px_-10px_hsl(var(--progress-fill)/0.7)] active:scale-[0.99] transition-transform"
-          style={{
-            backgroundColor: "hsl(var(--progress-fill))",
-            fontSize: "1.05rem",
-            letterSpacing: "0.04em",
-          }}
+          onClick={() => {
+  if (typeof window.fbq === "function") {
+    window.fbq("track", "InitiateCheckout", {
+      content_name: "Mujer Sabia en Accion",
+      currency: "USD",
+      value: 9.90,
+    });
+  }
+  window.location.href = VSL_URL;
+}}
         >
           QUIERO ENTENDER MÁS
         </button>
