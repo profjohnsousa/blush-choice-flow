@@ -9,6 +9,12 @@ import { Answers } from "./types";
 
 const TOTAL_STEPS = 14;
 
+declare global {
+  interface Window {
+    fbq: (...args: unknown[]) => void;
+  }
+}
+
 type Phase =
   | { kind: "question"; step: number }
   | { kind: "interstitial" }
@@ -29,6 +35,16 @@ const QuizFlow = () => {
 
   const handleSingle = (step: number, optionId: string) => {
     setAnswers((prev) => ({ ...prev, [step]: optionId }));
+
+    if (step === 1) {
+      if (typeof window.fbq === "function") {
+        window.fbq("track", "ViewContent", {
+          content_name: "Quiz Mujer Sabia en Accion",
+          content_category: "Quiz Step 1",
+        });
+      }
+    }
+
     if (step === 2) {
       setPhase({ kind: "interstitial" });
     } else {
@@ -50,6 +66,13 @@ const QuizFlow = () => {
     // eslint-disable-next-line no-console
     console.log("Final quiz answers:", finalAnswers);
     sessionStorage.setItem("quizAnswers", JSON.stringify(finalAnswers));
+
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "Lead", {
+        content_name: "Quiz Completo - Mujer Sabia en Accion",
+      });
+    }
+
     return <LoadingScreen onComplete={() => setPhase({ kind: "result" })} />;
   }
 
