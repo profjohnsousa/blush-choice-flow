@@ -111,63 +111,57 @@ const profiles: Profile[] = [
   },
 ];
 
-// Determine profile based on quiz answers
 const getProfile = (): Profile => {
-  // Score system based on answer patterns
-  // This runs on mount so we use a simple random weighted by
-  // typical answer distributions across the 4 archetypes
-  const scores = [0, 0, 0, 0]; // indexes: 0=Intencional, 1=Desorganizada, 2=Visionaria, 3=Desconectada
+  const scores = [0, 0, 0, 0];
 
   try {
-    // Try to read answers from sessionStorage if QuizFlow stored them
     const raw = sessionStorage.getItem("quizAnswers");
     if (raw) {
       const answers = JSON.parse(raw);
 
-      // Step 4 — self-talk phrases
-      if (answers[4] === "a") scores[0] += 2; // "sé lo que hacer pero no hago" → Intencional
-      if (answers[4] === "b") scores[1] += 2; // "rutina me consume" → Desorganizada
-      if (answers[4] === "c") scores[2] += 2; // "cuando mejore, empiezo" → Visionaria
-      if (answers[4] === "d") scores[0] += 2; // "algo me bloquea" → Intencional
+      if (answers[4] === "a") scores[0] += 2;
+      if (answers[4] === "b") scores[1] += 2;
+      if (answers[4] === "c") scores[2] += 2;
+      if (answers[4] === "d") scores[0] += 2;
 
-      // Step 6 — what happens when starting something new
-      if (answers[6] === "a") scores[0] += 2; // "me emociono pero desanimo" → Intencional
-      if (answers[6] === "b") scores[1] += 2; // "me pierdo en distracciones" → Desorganizada
-      if (answers[6] === "c") scores[2] += 1; // "me comparo y bloqueo" → Visionaria
-      if (answers[6] === "d") scores[2] += 2; // "miedo de errar" → Visionaria
-      if (answers[6] === "e") scores[3] += 2; // "oro pero espero señal" → Desconectada
+      if (answers[6] === "a") scores[0] += 2;
+      if (answers[6] === "b") scores[1] += 2;
+      if (answers[6] === "c") scores[2] += 1;
+      if (answers[6] === "d") scores[2] += 2;
+      if (answers[6] === "e") scores[3] += 2;
 
-      // Step 8 — conflict between spiritual and productive
-      if (answers[8] === "a") scores[3] += 2; // "productividad es del mundo" → Desconectada
-      if (answers[8] === "b") scores[3] += 2; // "tiempo de Dios" → Desconectada
-      if (answers[8] === "c") scores[1] += 1; // "puedo unir las dos" → Desorganizada
-      if (answers[8] === "d") scores[3] += 1; // "nunca lo había pensado" → Desconectada
+      if (answers[8] === "a") scores[3] += 2;
+      if (answers[8] === "b") scores[3] += 2;
+      if (answers[8] === "c") scores[1] += 1;
+      if (answers[8] === "d") scores[3] += 1;
 
-      // Step 9 — reaction to procrastination
-      if (answers[9] === "a") scores[0] += 2; // "me culpo y prometo" → Intencional
-      if (answers[9] === "b") scores[1] += 2; // "compenso con tareas" → Desorganizada
-      if (answers[9] === "c") scores[3] += 2; // "oro pero sigo paralizada" → Desconectada
-      if (answers[9] === "d") scores[2] += 2; // "finjo que está bien" → Visionaria
+      if (answers[9] === "a") scores[0] += 2;
+      if (answers[9] === "b") scores[1] += 2;
+      if (answers[9] === "c") scores[3] += 2;
+      if (answers[9] === "d") scores[2] += 2;
 
-      // Step 14 — situation that describes you today
-      if (answers[14] === "a") scores[2] += 2; // "quiero cambiar pero bloqueada" → Visionaria
-      if (answers[14] === "b") scores[2] += 2; // "pienso demasiado y actúo poco" → Visionaria
-      if (answers[14] === "c") scores[1] += 2; // "hago muchas cosas sin enfoque" → Desorganizada
-      if (answers[14] === "d") scores[0] += 2; // "sé qué hacer pero no sostengo" → Intencional
+      if (answers[14] === "a") scores[2] += 2;
+      if (answers[14] === "b") scores[2] += 2;
+      if (answers[14] === "c") scores[1] += 2;
+      if (answers[14] === "d") scores[0] += 2;
     }
   } catch {
-    // fallback to random if no answers stored
+    // fallback
   }
 
   const maxScore = Math.max(...scores);
-  // If all zeros (no answers stored), pick randomly
   if (maxScore === 0) {
     return profiles[Math.floor(Math.random() * profiles.length)];
   }
 
-  const winnerIndex = scores.indexOf(maxScore);
-  return profiles[winnerIndex];
+  return profiles[scores.indexOf(maxScore)];
 };
+
+declare global {
+  interface Window {
+    fbq: (...args: unknown[]) => void;
+  }
+}
 
 const ResultScreen = () => {
   const profile = useRef(getProfile()).current;
@@ -251,15 +245,22 @@ const ResultScreen = () => {
         <button
           type="button"
           onClick={() => {
-  if (typeof window.fbq === "function") {
-    window.fbq("track", "InitiateCheckout", {
-      content_name: "Mujer Sabia en Accion",
-      currency: "USD",
-      value: 9.90,
-    });
-  }
-  window.location.href = VSL_URL;
-}}
+            if (typeof window.fbq === "function") {
+              window.fbq("track", "InitiateCheckout", {
+                content_name: "Mujer Sabia en Accion",
+                currency: "USD",
+                value: 9.90,
+              });
+            }
+            window.location.href = VSL_URL;
+          }}
+          className="w-full rounded-xl py-[18px] font-bold text-white active:scale-[0.99] transition-transform"
+          style={{
+            backgroundColor: "hsl(var(--progress-fill))",
+            fontSize: "1.05rem",
+            letterSpacing: "0.04em",
+            boxShadow: "0 10px 30px -10px hsl(336 69% 52% / 0.7)",
+          }}
         >
           QUIERO ENTENDER MÁS
         </button>
