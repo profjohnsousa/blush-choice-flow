@@ -12,6 +12,10 @@ const TOTAL_STEPS = 14;
 declare global {
   interface Window {
     fbq: (...args: unknown[]) => void;
+    ttq: {
+      track: (event: string, params?: Record<string, unknown>) => void;
+      page: () => void;
+    };
   }
 }
 
@@ -37,10 +41,17 @@ const QuizFlow = () => {
     setAnswers((prev) => ({ ...prev, [step]: optionId }));
 
     if (step === 1) {
+      // Meta Pixel
       if (typeof window.fbq === "function") {
         window.fbq("track", "ViewContent", {
           content_name: "Quiz Mujer Sabia en Accion",
           content_category: "Quiz Step 1",
+        });
+      }
+      // TikTok Pixel
+      if (typeof window.ttq !== "undefined") {
+        window.ttq.track("ViewContent", {
+          content_name: "Quiz Mujer Sabia en Accion",
         });
       }
     }
@@ -67,8 +78,15 @@ const QuizFlow = () => {
     console.log("Final quiz answers:", finalAnswers);
     sessionStorage.setItem("quizAnswers", JSON.stringify(finalAnswers));
 
+    // Meta Pixel
     if (typeof window.fbq === "function") {
       window.fbq("track", "Lead", {
+        content_name: "Quiz Completo - Mujer Sabia en Accion",
+      });
+    }
+    // TikTok Pixel
+    if (typeof window.ttq !== "undefined") {
+      window.ttq.track("SubmitForm", {
         content_name: "Quiz Completo - Mujer Sabia en Accion",
       });
     }
