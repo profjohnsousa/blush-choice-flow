@@ -245,22 +245,22 @@ const ResultScreen = () => {
         <button
           type="button"
           onClick={() => {
-            if (typeof window.fbq === "function") {
-              window.fbq("track", "InitiateCheckout", {
-                content_name: "Mujer Sabia en Accion",
-                currency: "USD",
-                value: 9.90,
-              });
-            }
-            window.location.href = VSL_URL;
-          }}
-          className="w-full rounded-xl py-[18px] font-bold text-white active:scale-[0.99] transition-transform"
-          style={{
-            backgroundColor: "hsl(var(--progress-fill))",
-            fontSize: "1.05rem",
-            letterSpacing: "0.04em",
-            boxShadow: "0 10px 30px -10px hsl(336 69% 52% / 0.7)",
-          }}
+  if (typeof window.fbq === "function") {
+    window.fbq("track", "InitiateCheckout", {
+      content_name: "Mujer Sabia en Accion",
+      currency: "USD",
+      value: 9.90,
+    });
+  }
+  if (typeof window.ttq !== "undefined") {
+    window.ttq.track("InitiateCheckout", {
+      content_name: "Mujer Sabia en Accion",
+      currency: "USD",
+      value: 9.90,
+    });
+  }
+  window.location.href = VSL_URL;
+}}
         >
           QUIERO ENTENDER MÁS
         </button>
